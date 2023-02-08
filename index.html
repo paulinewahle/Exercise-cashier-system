@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content=""
+      width="device-width,"
+      initial-scale="1.0"
+    />
+    <title>coffee is life</title>
+  </head>
+  <body>
+    <div id="card-container">
+      <ol>
+        <li>
+          <button onclick="add('Coffee'), price(2.95), total(), find('Coffee')">
+            <img src="img/coffee.png" alt="card1" loading="lazy" />
+            <h3>Coffee</h3>
+            <small> $2.95</small>
+          </button>
+        </li>
+
+        <li class="cappuccinoBtn">
+          <button
+            onclick="add('Cappuccino'), price(3.95), total(), find('Cappuccino')"
+          >
+            <img src="img/cappuccino.png" alt="card1" loading="lazy" />
+            <h3>Cappuccino</h3>
+            <small> $3.95</small>
+          </button>
+        </li>
+        <li class="latteBtn">
+          <button onclick="add('Latte'), price(4.15), total()">
+            <img src="img/latte.png" alt="card1" loading="lazy" />
+            <h3>Latte</h3>
+            <small> $4.15</small>
+          </button>
+        </li>
+        <li class="mochaBtn">
+          <button onclick="add('Mocha'), price(4.65), total()">
+            <img src="img/mocha.png" alt="card1" loading="lazy" />
+            <h3>Mocha</h3>
+            <small> $4.65 </small>
+          </button>
+        </li>
+        <li class="americanoBtn">
+          <button onclick="add('Americano'), price(3.45), total()">
+            <img src="img/americano.png" alt="card1" loading="lazy" />
+            <h3>Americano</h3>
+            <small> $3.45</small>
+          </button>
+        </li>
+        <li class="hotchocolateBtn">
+          <button onclick="add('Hot Chocolate'), price(5.95), total()">
+            <img src="img/hot-chocolate.png" alt="card1" loading="lazy" />
+            <h3>Hot Chocolate</h3>
+            <small> $5.95 </small>
+          </button>
+        </li>
+      </ol>
+    </div>
+
+    <aside>
+      <div class="views">
+        <!-- bug -->
+        <button id="cashierButton" onclick="">Cashier</button>
+        <button id="baristaButton" onclick="">Barista</button>
+        <button id="managerButton" onclick="">Manager</button>
+      </div>
+      <div class="empty">
+        <div class="dots">
+          <div id="dot1"></div>
+          <div id="dot2"></div>
+          <div id="dot3"></div>
+        </div>
+        <h3>Please choose your status</h3>
+      </div>
+      <div class="cashier">
+        <h2>Current Order</h2>
+        <ul id="current-order-list"></ul>
+        <small id="total-price"> </small>
+        <button class="confirm-order" onclick="confirmOrder()">
+          Confirm Order
+        </button>
+      </div>
+
+      <div class="barista">
+        <h2>Waitlist Orders</h2>
+        <div id="servingOrderContainer">
+          <button class="order-done" onclick="orderDone()">Order Done</button>
+          <ul id="orders-to-be-served"></ul>
+        </div>
+      </div>
+
+      <div class="manager">
+        <h2>Total orders of the day</h2>
+        <ul id="served-orders-list"></ul>
+        <p id="total-income"></p>
+        <p id="total-number"></p>
+        <p id="amount"></p>
+
+        <button class="end-day">Reset the day</button>
+      </div>
+    </aside>
+
+    <style>
+      @import url("https://use.typekit.net/nxn7iwn.css");
+      body {
+        display: flex;
+        margin: 0;
+      }
+      #card-container {
+        width: 70%;
+        margin: 0;
+        padding: 0;
+        background-color: #ede0d4;
+      }
+      ol {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 0;
+      }
+      li {
+        margin: 30px;
+        background-color: #ede0d4;
+        list-style: none;
+        width: 25%;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        border-radius: 10%;
+        height: 340px;
+        transition: all 0.2s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      li:hover {
+        transform: scale(1.1);
+      }
+      li img {
+        width: 100%;
+      }
+      li h3 {
+        color: black;
+        text-align: center;
+        font-size: 25px;
+        font-family: gaultier, sans-serif;
+        font-weight: 200;
+        margin: 0;
+      }
+
+      li small {
+        text-align: center;
+        color: grey;
+        font-family: sans-serif;
+        font-size: 15px;
+        font-weight: 100;
+        margin-top: -60px;
+      }
+
+      aside {
+        font-family: Arial, Helvetica, sans-serif;
+        color: white;
+        padding: 2%;
+        padding-left: 5%;
+        box-sizing: border-box;
+        width: 30%;
+        background-color: #b08968;
+        box-shadow: rgba(0, 0, 0, 0.4) 0px 30px 90px;
+      }
+      .dots {
+        margin-top: 20%;
+        display: flex;
+        flex-direction: row;
+      }
+      #dot1,
+      #dot2,
+      #dot3 {
+        width: 30px;
+        height: 30px;
+        background-color: white;
+        border-radius: 50%;
+        margin: 2%;
+        animation: createBox 2s;
+      }
+      #dot1 {
+        animation: Dot1 2s;
+        animation-iteration-count: infinite;
+      }
+      #dot2 {
+        animation: Dot2 2s;
+        animation-iteration-count: infinite;
+      }
+      #dot3 {
+        animation: Dot3 2s;
+        animation-iteration-count: infinite;
+      }
+      @keyframes Dot1 {
+        0% {
+          transform: scale(0.5);
+        }
+        20% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(0.5);
+        }
+      }
+      @keyframes Dot2 {
+        0% {
+          transform: scale(0.5);
+        }
+        40% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(0.5);
+        }
+      }
+      @keyframes Dot3 {
+        0% {
+          transform: scale(0.5);
+        }
+        60% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(0.5);
+        }
+      }
+      .views {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      .views button {
+        color: white;
+        background-color: rgba(0, 0, 0, 0);
+        text-align: left;
+        width: 25%;
+        border: none;
+        border-bottom: white 1px solid;
+        margin-bottom: 10px;
+        font-size: 16px;
+        font-family: gaultier, sans-serif;
+      }
+      .views button:hover {
+        font-weight: bold;
+        border-bottom: white 3px solid;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .views button:active {
+        font-weight: bold;
+        border-bottom: white 3px solid;
+        font-size: 16px;
+      }
+      .cashier {
+        display: block;
+      }
+      .barista {
+        display: block;
+      }
+      .manager {
+        display: block;
+      }
+      .empty #cashierButton:visited, /*bug*/
+      #baristaButton:visited,
+      #managerButton:visited {
+        color: red;
+        border: 3px red solid;
+      }
+      .cashier #cashierButton:visited {
+        display: block;
+      }
+      .barista #baristaButton:active {
+        display: block;
+      }
+      .manager #managerButton:active {
+        display: block;
+      }
+      li button {
+        border-style: none;
+        background-color: rgba(0, 0, 0, 0);
+      }
+      button:focus {
+        outline: 0;
+      }
+      aside h3 {
+        font-family: "gaultier thin", sans-serif;
+        font-size: 30px;
+      }
+      aside h2 {
+        font-family: gaultier, sans-serif;
+        font-size: 30px;
+      }
+      #servingOrderContainer {
+        display: flex;
+        align-items: flex-start;
+      }
+
+      #current-order-list li,
+      #orders-to-be-served li,
+      #served-orders-list li {
+        height: 100%;
+        box-shadow: none;
+        border-radius: 0;
+        padding: 5px;
+        border-bottom: 2px solid #ddb892;
+        width: 200px;
+        display: block;
+        margin: 0;
+        background-color: rgba(0, 0, 0, 0);
+      }
+
+      #current-order-list {
+        margin-bottom: 15px;
+        padding: 0;
+      }
+      #orders-to-be-served li {
+        padding: 0;
+        height: 25px;
+        padding-top: 5px;
+      }
+      #orders-to-be-served {
+        margin: 0;
+        padding: 0;
+      }
+      .confirm-order,
+      .end-day {
+        display: block;
+        font-family: "gaultier", sans-serif;
+        font-weight: 300;
+        font-size: 13px;
+        background-color: #ddb892;
+        border-style: none;
+        color: white;
+        padding: 2%;
+        border-radius: 7px;
+      }
+      .order-done {
+        font-family: "gaultier", sans-serif;
+        color: #ddb892;
+        font-weight: 300;
+        font-size: 15px;
+        border: none;
+        margin: 0;
+        margin-top: 1%;
+        background-color: rgba(0, 0, 0, 0);
+      }
+      #total-price {
+        font-family: "gaultier", sans-serif;
+        font-size: 30px;
+      }
+      #served-orders-list {
+        margin-left: 0;
+        padding-left: 0;
+        max-height: 150px;
+        overflow-y: scroll;
+      }
+    </style>
+
+    <script>
+      var currentCustomerOrder = []; //! Required
+      var ordersToBeServed = [];
+      var servedOrdersArray = [];
+      var totalPrice = [];
+      var totalIncomeArray = [];
+      var totalIncomeDisplay = document.querySelector("#total-income");
+
+      var totalPriceDisplay = document.querySelector("#total-price");
+      var ordersToBeServedDisplay = document.querySelector(
+        "#orders-to-be-served"
+      );
+      var currentOrderList = document.querySelector("#current-order-list");
+      var servedOrdersDisplay = document.querySelector("#served-orders-list");
+      var totalNumberDisplay = document.querySelector("#total-number");
+      var amountList = document.querySelector("#amount");
+      var amountDrinks = 0;
+      var thisIsTheArrayOutOfShiftsFromServedOrdes = [];
+      var countCoffee = 0;
+      var countCappuccino = 0;
+      var countLatte = 0;
+      var countMocha = 0;
+      var countAmericano = 0;
+      var countHotChocolate = 0;
+      function add(item) {
+        currentCustomerOrder.push(item);
+        currentOrderList.innerHTML += "<li>" + item + "</li>";
+
+        if (item == "Coffee") {
+          countCoffee++;
+          console.log(countCoffee + " x Coffee");
+        } else if (item == "Cappuccino") {
+          countCappuccino++;
+          console.log(countCappuccino + " x Cappuccino");
+        } else if (item == "Latte") {
+          countLatte++;
+          console.log(countCappuccino + " x Latte");
+        } else if (item == "Mocha") {
+          countMocha++;
+          console.log(countMocha + " x Mocha");
+        } else if (item == "Americano") {
+          countAmericano++;
+          console.log(countAmericano + " x Americano");
+        } else if (item == "HotChocolate") {
+          countHotChocolate++;
+          console.log(countHotChocolate + " x HotChocolate");
+        }
+      }
+
+      //!push and caluclate totalPrice
+      function price(item) {
+        totalPrice.push(item);
+      }
+
+      function total() {
+        var sum = totalPrice.reduce(function (a, b) {
+          return a + b;
+        }, 0);
+        var sumTwoDecimals = Math.floor(sum * 100) / 100; //! 0=ausgangswert
+        console.log(sumTwoDecimals);
+        totalPriceDisplay.innerHTML = "Total: " + sumTwoDecimals + " $";
+      }
+      totalIncomeArray.push(sumTwoDecimals);
+      /*var countOccurances = function(arr, val) {
+              //call back function
+              return arr.reduce((amount, drink) => {
+                return val === element ? amount + 1 : amount;
+              }, 0); //inital value
+            };*/
+
+      //next 2 functions: buttons
+      function confirmOrder() {
+        ordersToBeServed = currentCustomerOrder; //transfer !!!!!concat
+        totalPrice = [0]; //reset
+        totalPriceDisplay.innerHTML = "Total: " + totalPrice + " $";
+        console.log(currentCustomerOrder);
+        console.log(ordersToBeServed);
+        currentCustomerOrder = []; //reset
+        currentOrderList.innerHTML = currentCustomerOrder;
+        var toBeServedList = "";
+        for (var item of ordersToBeServed) {
+          //item of= element
+          toBeServedList += "<li>" + item + "</li>";
+          console.log(item);
+        }
+        console.log(toBeServedList);
+        ordersToBeServedDisplay.innerHTML = toBeServedList;
+
+        /*currentOrderList.innerHTML = "<li>" + currentCustomerOrder + "</li>"; //reset
+              if (ordersToBeServed.length > 1) {
+                function splitArray() {
+                  //create function
+                  var str = ordersToBeServed.toString();
+                  var splitOrders = str.split(" ");
+                }
+                splitArray(); // call function
+                ordersToBeServedDisplay.innerHTML +=
+                  "<li class='group-order'>" + splitOrders + "</li>"; //!print function result  //?bug:splitOrder is not defined
+              }*/
+      }
+      function orderDone() {
+        //just a check //just a check
+        /*var finishedOrder = ordersToBeServed[0];
+              console.log(finishedOrder);*/
+        // var stringOrdersToBeServed = ordersToBeServed.toString(); maybe solve it like this?!
+        var finishedOrder = ordersToBeServed.shift(); //Just takes the first letter
+        console.log(ordersToBeServed + "hereordersToBeServed");
+        console.log(finishedOrder);
+
+        var toBeServedList = "";
+        for (var item of ordersToBeServed) {
+          //item of= element
+          toBeServedList += "<li>" + item + "</li>";
+          console.log(item);
+        }
+
+        ordersToBeServedDisplay.innerHTML = toBeServedList; //This updates the Waitlist to the shortest version
+        //
+        servedOrdersArray.splice(0, 0, finishedOrder);
+        var managerList = "";
+        for (var item of servedOrdersArray) {
+          //item of= element
+          managerList += "<li>" + item + "</li>";
+          console.log(item);
+        }
+
+        servedOrdersDisplay.innerHTML = managerList;
+        console.log(servedOrdersArray);
+        console.log(servedOrdersArray.length);
+
+        totalNumberDisplay.innerHTML =
+          "Total Drinks: " + servedOrdersArray.length;
+        totalIncomeDisplay.innerHTML = "Total Income: " + totalIncomeArrray;
+        amountList.innerHTML =
+          countCoffee +
+          " x Coffee <br>" +
+          countCappuccino +
+          " x Cappuccino <br>" +
+          countLatte +
+          " x Latte <br>" +
+          countMocha +
+          " x Mocha <br>" +
+          countAmericano +
+          " x Americano <br>" +
+          countHotChocolate +
+          " x HotChocolate";
+        /*function checkCoffee(find) {
+                return find == "Coffee";
+              }
+              function found() {
+                if (servedOrdersArray.find(checkCoffee));
+              }
+              found();*/
+        /*var findItem = servedOrdersArray.find(searchItem);
+              function searchItem(item) {
+                return item === "Cappuccino";
+              }
+              console.log(findItem + "gefunden");*/
+
+        //console.log(countOccurances(servedOrdersArray, "Latte"));
+        /*console.log(finishedOrder + "das kommt in den neuen array!"); //how not display comma??
+              //servedOrdersArray.push(finishedOrder + "<br>"); //creates "" at beginning
+              servedOrdersArray.splice(0, 0, finishedOrder + "<br>"); //creates "" at end
+              console.log(servedOrdersArray);
+              //This prints the managers total list
+              servedOrdersDisplay.innerHTML = servedOrdersArray;*/
+
+        /*servedOrdersArray = thisIsTheArrayOutOfShiftsFromServedOrdes.concat(
+                servedOrdersArray
+              );
+              servedOrdersDisplay.innerHTML = servedOrdersArray + "<br>";
+              var totalNumber = servedOrdersArray.length; //why is it counting the letters and not words?
+              console.log(totalNumber);
+              console.log(servedOrdersArray);*/
+      }
+
+      //if quantity of orderOption, button Click etc. is equal to 1 = normale dom maipulation to print word
+      //if quantity of orderOption, button Click etc. higher than 1 (count occurance inside array) = print word + number
+      //TODO: var specialOrder = document.querySelector(".specialRequest");
+      //console.log(listInput.value);
+    </script>
+  </body>
+</html>
